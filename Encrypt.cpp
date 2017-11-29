@@ -4,11 +4,13 @@
 #include <stdlib.h>
 #include <random>
 #include <time.h>
+#include <vector>
 
 
 int main(){
 
 	std::string in, out, line, char_pool, mess, str = "";
+	std::vector<std::string> outputText;
 	char choice;
 	
 	std::ofstream fout;
@@ -28,10 +30,6 @@ int main(){
 	}
 
 	else{
-		std::cout<< "Enter Out File name:";
-		std::cin >> out;
-		fout.open(out);
-	
 		std::cout << "Enter seed:";
 		std::cin >> seed;
 		std::srand(seed);										//generates how many fake charaters inserted per character
@@ -39,7 +37,7 @@ int main(){
 		std::default_random_engine eng((unsigned int) time(0));
 		std::uniform_int_distribution<int> dis(0, char_pool.size()-1);	//generates ramdom char_pool index
 	
-		if (choice == 'E'){
+		if (choice == 'E' || choice == 'e'){
 			while (std::getline(fin, line)){
 				mess = "";	//the encrypted line that gets ouputted to file
 
@@ -55,12 +53,17 @@ int main(){
 
 					mess += str;								//Append correct char + fake chars to output line
 				}
-				fout << mess << std::endl;
+				outputText.push_back(mess + "\n");
+			}
+			fout.open(in);										//rewrites input text file with the encrpytion data
+			for (std::string s : outputText){
+				fout << s;
 			}
 		}
+		
 
 
-		if (choice == 'D'){
+		if (choice == 'D' || choice == 'd'){
 			while (std::getline(fin, line)){
 				mess = "";										
 				std::string sub = "";
@@ -80,7 +83,11 @@ int main(){
 					}
 				}
 				mess += sub;
-				fout << mess << std::endl;
+				outputText.push_back(mess + "\n");
+			}
+			fout.open(in);										//rewrites input text file with the decrypted data
+			for (std::string s : outputText){
+				fout << s;
 			}
 		}
 
